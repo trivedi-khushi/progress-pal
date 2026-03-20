@@ -53,6 +53,25 @@
     --progress-glow: 262 83% 58%;
   }
 
+  /* Green phase overrides for >= 50% progress */
+  .green-phase {
+    --gradient-start: 152 76% 40%;
+    --gradient-mid: 160 70% 45%;
+    --gradient-end: 172 66% 50%;
+    --progress-glow: 152 76% 40%;
+    --primary: 152 76% 40%;
+    --ring: 152 76% 40%;
+  }
+
+  .dark .green-phase {
+    --gradient-start: 152 80% 50%;
+    --gradient-mid: 160 75% 55%;
+    --gradient-end: 172 70% 55%;
+    --progress-glow: 152 80% 50%;
+    --primary: 152 80% 55%;
+    --ring: 152 80% 55%;
+  }
+
   .dark {
     --background: 260 25% 6%;
     --foreground: 260 10% 92%;

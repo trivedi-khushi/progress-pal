@@ -55,13 +55,9 @@ export function useGoalTracker() {
   }, []);
 
   const reset = useCallback(() => {
-    setState((s) => ({
-      goal: s.goal,
-      progress: 0,
-      logs: [],
-      startedAt: null,
-      completedAt: null,
-    }));
+    const fresh = { goal: null, progress: 0, logs: [], startedAt: null, completedAt: null };
+    setState(fresh);
+    localStorage.removeItem(STORAGE_KEY);
   }, []);
 
   const percentage = state.goal ? Math.round((state.progress / state.goal) * 100) : 0;
