@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, RotateCcw } from "lucide-react";
+import { Plus, RotateCcw, Zap } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { getQuote } from "@/lib/quotes";
 import { formatTimeAgo, formatDuration } from "@/lib/timeFormat";
 import { ActivityLog } from "@/components/ActivityLog";
 import { ResetDialog } from "@/components/ResetDialog";
+import { HueBurst } from "@/components/HueBurst";
 import type { LogEntry } from "@/hooks/useGoalTracker";
 import confetti from "canvas-confetti";
 
@@ -16,6 +18,7 @@ interface ProgressTrackerProps {
   lastClickTime: number | null;
   totalDuration: number | null;
   logs: LogEntry[];
+  isDark: boolean;
   onIncrement: () => void;
   onReset: () => void;
 }
@@ -28,6 +31,7 @@ export function ProgressTracker({
   lastClickTime,
   totalDuration,
   logs,
+  isDark,
   onIncrement,
   onReset,
 }: ProgressTrackerProps) {
@@ -36,6 +40,24 @@ export function ProgressTracker({
   const [showReset, setShowReset] = useState(false);
   const [clickScale, setClickScale] = useState(false);
   const [hasTriggeredConfetti, setHasTriggeredConfetti] = useState(false);
+  const [burstTrigger, setBurstTrigger] = useState(0);
+  const [displayPct, setDisplayPct] = useState(percentage);
+
+  // Animated percentage counter
+  useEffect(() => {
+    const start = displayPct;
+    const end = percentage;
+    if (start === end) return;
+    const duration = 400;
+    const startTime = Date.now();
+    const tick = () => {
+      const elapsed = Date.now() - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      setDisplayPct(Math.round(start + (end - start) * t));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [percentage]);
 
   // Live "last updated" timer
   useEffect(() => {
@@ -50,9 +72,14 @@ export function ProgressTracker({
   useEffect(() => {
     if (isComplete && !hasTriggeredConfetti) {
       setHasTriggeredConfetti(true);
-      const end = Date.now() + 2000;
+      const end = Date.now() + 2500;
       const fire = () => {
-        confetti({ particleCount: 80, spread: 100, origin: { y: 0.6 } });
+        confetti({
+          particleCount: 100,
+          spread: 120,
+          origin: { y: 0.6 },
+          colors: ["#8B5CF6", "#D946EF", "#3B82F6", "#EC4899", "#6366F1"],
+        });
         if (Date.now() < end) requestAnimationFrame(fire);
       };
       fire();
@@ -62,105 +89,154 @@ export function ProgressTracker({
   const handleClick = useCallback(() => {
     onIncrement();
     setClickScale(true);
+    setBurstTrigger((t) => t + 1);
     setTimeout(() => setClickScale(false), 200);
-    // Get quote based on next percentage
     const nextPct = Math.round(((progress + 1) / goal) * 100);
     setQuote(getQuote(nextPct));
   }, [onIncrement, progress, goal]);
 
   return (
-    <div className="flex min-h-screen flex-col items-center p-4 md:p-8">
-      <div className="w-full max-w-lg space-y-6 animate-fade-in">
-        {/* Header */}
-        <div className="text-center space-y-1 pt-8">
-          <h1 className="text-2xl font-display font-bold tracking-tight text-foreground">
-            {isComplete ? "🎉 Goal Complete!" : "Your Progress"}
-          </h1>
-          {lastClickTime && !isComplete && (
-            <p className="text-xs text-muted-foreground">
-              Last updated {lastUpdated}
-            </p>
-          )}
-        </div>
+    <>
+      <HueBurst trigger={burstTrigger} isDark={isDark} />
 
-        {/* Progress Card */}
-        <div className="glass-card p-6 md:p-8 space-y-6">
-          {/* Numbers */}
-          <div className="text-center space-y-1">
-            <div className="text-5xl font-display font-bold text-foreground tabular-nums">
-              {percentage}%
-            </div>
-            <div className="text-sm text-muted-foreground">
-              {progress} / {goal}
-            </div>
-          </div>
-
-          {/* Progress Bar */}
-          <div className="relative h-4 rounded-full bg-progress-track overflow-hidden">
-            <div
-              className={`absolute inset-y-0 left-0 rounded-full bg-primary transition-all duration-500 ease-out ${
-                isComplete ? "progress-glow" : ""
-              }`}
-              style={{ width: `${Math.min(percentage, 100)}%` }}
-            />
-          </div>
-
-          {/* Quote */}
-          <div
-            className="text-center text-sm text-muted-foreground italic min-h-[2.5rem] flex items-center justify-center transition-opacity duration-300"
-            key={quote}
-          >
-            {progress > 0 || isComplete ? quote : "Ready when you are ✨"}
-          </div>
-
-          {/* Completion stats */}
-          {isComplete && totalDuration !== null && (
-            <div className="text-center glass-card p-4 bg-accent/50">
-              <p className="text-xs text-muted-foreground">Completed in</p>
-              <p className="text-lg font-display font-semibold text-accent-foreground">
-                {formatDuration(totalDuration)}
+      <div className="relative z-10 flex min-h-screen flex-col items-center p-4 md:p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-lg space-y-6"
+        >
+          {/* Header */}
+          <div className="text-center space-y-1 pt-12">
+            <h1 className="text-2xl font-display font-bold tracking-tight">
+              {isComplete ? (
+                <span className="gradient-text">🎉 Goal Complete!</span>
+              ) : (
+                <span className="gradient-text">Your Progress</span>
+              )}
+            </h1>
+            {lastClickTime && !isComplete && (
+              <p className="text-xs text-muted-foreground">
+                Last updated {lastUpdated}
               </p>
+            )}
+          </div>
+
+          {/* Progress Card */}
+          <motion.div
+            layout
+            className="glass-card p-6 md:p-8 space-y-6"
+          >
+            {/* Percentage */}
+            <div className="text-center space-y-1">
+              <motion.div
+                key={displayPct}
+                className="text-6xl font-display font-bold tabular-nums gradient-text"
+                animate={clickScale ? { scale: [1, 1.08, 1] } : {}}
+                transition={{ duration: 0.3 }}
+              >
+                {displayPct}%
+              </motion.div>
+              <div className="text-sm text-muted-foreground font-medium">
+                {progress} / {goal}
+              </div>
             </div>
-          )}
-        </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-3">
-          <Button
-            onClick={handleClick}
-            disabled={isComplete}
-            className={`flex-1 h-14 text-base font-semibold gap-2 transition-transform ${
-              clickScale ? "scale-95" : "scale-100"
-            }`}
-            size="lg"
-          >
-            <Plus className="w-5 h-5" />
-            +1 Progress
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="h-14 px-4"
-            onClick={() => setShowReset(true)}
-          >
-            <RotateCcw className="w-4 h-4" />
-          </Button>
-        </div>
+            {/* Progress Bar */}
+            <div className="relative h-5 rounded-full bg-progress-track overflow-hidden">
+              <motion.div
+                className={`absolute inset-y-0 left-0 rounded-full progress-bar-fill ${
+                  isComplete ? "progress-glow" : ""
+                }`}
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.min(percentage, 100)}%` }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              />
+              {/* Glowing edge */}
+              {percentage > 0 && percentage < 100 && (
+                <motion.div
+                  className="absolute top-0 bottom-0 w-2 rounded-full bg-primary-foreground/30 blur-sm"
+                  animate={{ left: `calc(${Math.min(percentage, 100)}% - 4px)` }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  style={{ animation: "pulse-glow 2s ease-in-out infinite" }}
+                />
+              )}
+            </div>
 
-        {/* Activity Log */}
-        {logs.length > 0 && <ActivityLog logs={logs} />}
+            {/* Quote */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={quote}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.3 }}
+                className="text-center text-sm text-muted-foreground italic min-h-[2.5rem] flex items-center justify-center"
+              >
+                {progress > 0 || isComplete ? quote : "Ready when you are ✨"}
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Completion stats */}
+            {isComplete && totalDuration !== null && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center glass-card p-4 bg-accent/50"
+              >
+                <p className="text-xs text-muted-foreground">Completed in</p>
+                <p className="text-lg font-display font-semibold gradient-text">
+                  {formatDuration(totalDuration)}
+                </p>
+              </motion.div>
+            )}
+          </motion.div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <motion.div className="flex-1" whileTap={{ scale: 0.96 }}>
+              <Button
+                onClick={handleClick}
+                disabled={isComplete}
+                className="w-full h-14 text-base font-semibold gap-2 rounded-xl"
+                size="lg"
+              >
+                {isComplete ? (
+                  <Zap className="w-5 h-5" />
+                ) : (
+                  <Plus className="w-5 h-5" />
+                )}
+                +1 Progress
+              </Button>
+            </motion.div>
+            <motion.div whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="outline"
+                size="lg"
+                className="h-14 px-4 rounded-xl"
+                onClick={() => setShowReset(true)}
+              >
+                <RotateCcw className="w-4 h-4" />
+              </Button>
+            </motion.div>
+          </div>
+
+          {/* Activity Log */}
+          {logs.length > 0 && <ActivityLog logs={logs} />}
+        </motion.div>
+
+        <ResetDialog
+          open={showReset}
+          onOpenChange={setShowReset}
+          onConfirm={() => {
+            onReset();
+            setShowReset(false);
+            setQuote(getQuote(0));
+            setHasTriggeredConfetti(false);
+            setDisplayPct(0);
+          }}
+        />
       </div>
-
-      <ResetDialog
-        open={showReset}
-        onOpenChange={setShowReset}
-        onConfirm={() => {
-          onReset();
-          setShowReset(false);
-          setQuote(getQuote(0));
-          setHasTriggeredConfetti(false);
-        }}
-      />
-    </div>
+    </>
   );
 }
