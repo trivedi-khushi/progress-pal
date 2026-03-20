@@ -8,9 +8,7 @@ export default {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+      screens: { "2xl": "1400px" },
     },
     extend: {
       fontFamily: {
@@ -63,9 +61,7 @@ export default {
         },
         progress: {
           track: "hsl(var(--progress-track))",
-          fill: "hsl(var(--progress-fill))",
         },
-        celebration: "hsl(var(--celebration))",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -97,9 +93,10 @@ export default {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-6px)" },
         },
-        "pulse-ring": {
-          "0%": { transform: "scale(1)", opacity: "0.6" },
-          "100%": { transform: "scale(1.5)", opacity: "0" },
+        "counter-tick": {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.15)" },
+          "100%": { transform: "scale(1)" },
         },
       },
       animation: {
@@ -109,7 +106,7 @@ export default {
         "scale-in": "scale-in 0.3s ease-out forwards",
         shimmer: "shimmer 2s linear infinite",
         float: "float 3s ease-in-out infinite",
-        "pulse-ring": "pulse-ring 1.5s ease-out infinite",
+        "counter-tick": "counter-tick 0.3s ease-out",
       },
     },
   },
