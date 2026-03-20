@@ -53,6 +53,25 @@
     --progress-glow: 262 83% 58%;
   }
 
+  /* Green phase overrides for >= 50% progress */
+  .green-phase {
+    --gradient-start: 152 76% 40%;
+    --gradient-mid: 160 70% 45%;
+    --gradient-end: 172 66% 50%;
+    --progress-glow: 152 76% 40%;
+    --primary: 152 76% 40%;
+    --ring: 152 76% 40%;
+  }
+
+  .dark .green-phase {
+    --gradient-start: 152 80% 50%;
+    --gradient-mid: 160 75% 55%;
+    --gradient-end: 172 70% 55%;
+    --progress-glow: 152 80% 50%;
+    --primary: 152 80% 55%;
+    --ring: 152 80% 55%;
+  }
+
   .dark {
     --background: 260 25% 6%;
     --foreground: 260 10% 92%;
@@ -118,9 +137,11 @@
   .gradient-text {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-mid)), hsl(var(--gradient-end)));
+    transition: background-image 0.6s ease;
   }
   .progress-bar-fill {
     background: linear-gradient(90deg, hsl(var(--gradient-start)), hsl(var(--gradient-mid)), hsl(var(--gradient-end)));
+    transition: background 0.6s ease;
     background-size: 200% 100%;
     animation: progress-shimmer 3s ease-in-out infinite;
   }

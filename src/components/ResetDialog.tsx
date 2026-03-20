@@ -22,8 +22,8 @@ export function ResetDialog({ open, onOpenChange, onConfirm }: ResetDialogProps)
         <AlertDialogHeader>
           <AlertDialogTitle>Reset Progress?</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to reset your progress? Your goal will be
-            kept, but all progress and activity logs will be cleared.
+            This will completely clear your goal, progress, and all activity
+            logs. You'll start fresh from the goal setup screen.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

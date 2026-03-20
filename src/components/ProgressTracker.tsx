@@ -171,7 +171,7 @@ export function ProgressTracker({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.3 }}
-                className="text-center text-sm text-muted-foreground italic min-h-[2.5rem] flex items-center justify-center"
+                className="text-center text-base md:text-lg text-muted-foreground italic min-h-[3rem] flex items-center justify-center px-4 leading-relaxed font-medium"
               >
                 {progress > 0 || isComplete ? quote : "Ready when you are ✨"}
               </motion.div>

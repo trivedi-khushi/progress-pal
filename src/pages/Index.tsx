@@ -8,8 +8,11 @@ const Index = () => {
   const tracker = useGoalTracker();
   const { isDark, toggle } = useTheme();
 
+  // Apply green theme class when progress >= 50%
+  const isGreenPhase = tracker.goal !== null && tracker.percentage >= 50;
+
   return (
-    <>
+    <div className={isGreenPhase ? "green-phase" : ""}>
       <ThemeToggle isDark={isDark} onToggle={toggle} />
       {tracker.goal === null ? (
         <GoalSetup onSetGoal={tracker.setGoal} />
@@ -27,7 +30,7 @@ const Index = () => {
           onReset={tracker.reset}
         />
       )}
-    </>
+    </div>
   );
 };
 
