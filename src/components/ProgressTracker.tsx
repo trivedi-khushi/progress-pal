@@ -146,7 +146,7 @@ export function ProgressTracker({
                 {displayPct}%
               </motion.div>
               <div className="text-sm text-muted-foreground font-medium">
-                {progress} / {goal}
+                {progress} / {goal} {getGoalType(goalType)?.unitLabel ?? ""}
               </div>
             </div>
 
