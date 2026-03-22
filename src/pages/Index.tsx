@@ -23,6 +23,7 @@ const Index = () => {
         <ProgressTracker
           goal={tracker.goal}
           name={tracker.name ?? "You"}
+          goalType={tracker.goalType ?? ""}
           progress={tracker.progress}
           percentage={tracker.percentage}
           isComplete={tracker.isComplete}

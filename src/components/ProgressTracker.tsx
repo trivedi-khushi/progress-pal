@@ -4,6 +4,7 @@ import { Plus, RotateCcw, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getQuote } from "@/lib/quotes";
 import { formatTimeAgo, formatDuration } from "@/lib/timeFormat";
+import { getGoalType } from "@/lib/goalTypes";
 import { ActivityLog } from "@/components/ActivityLog";
 import { ResetDialog } from "@/components/ResetDialog";
 import { HueBurst } from "@/components/HueBurst";
