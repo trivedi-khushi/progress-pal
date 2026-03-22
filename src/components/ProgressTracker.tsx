@@ -12,6 +12,7 @@ import confetti from "canvas-confetti";
 
 interface ProgressTrackerProps {
   goal: number;
+  name: string;
   progress: number;
   percentage: number;
   isComplete: boolean;
@@ -21,10 +22,13 @@ interface ProgressTrackerProps {
   isDark: boolean;
   onIncrement: () => void;
   onReset: () => void;
+  onClickSound: (pct: number) => void;
+  onCompleteSound: () => void;
 }
 
 export function ProgressTracker({
   goal,
+  name,
   progress,
   percentage,
   isComplete,
@@ -34,6 +38,8 @@ export function ProgressTracker({
   isDark,
   onIncrement,
   onReset,
+  onClickSound,
+  onCompleteSound,
 }: ProgressTrackerProps) {
   const [quote, setQuote] = useState(() => getQuote(0));
   const [lastUpdated, setLastUpdated] = useState("");
@@ -68,10 +74,11 @@ export function ProgressTracker({
     return () => clearInterval(id);
   }, [lastClickTime]);
 
-  // Confetti on completion
+  // Confetti + sound on completion
   useEffect(() => {
     if (isComplete && !hasTriggeredConfetti) {
       setHasTriggeredConfetti(true);
+      onCompleteSound();
       const end = Date.now() + 2500;
       const fire = () => {
         confetti({
@@ -84,7 +91,7 @@ export function ProgressTracker({
       };
       fire();
     }
-  }, [isComplete, hasTriggeredConfetti]);
+  }, [isComplete, hasTriggeredConfetti, onCompleteSound]);
 
   const handleClick = useCallback(() => {
     onIncrement();
@@ -93,7 +100,8 @@ export function ProgressTracker({
     setTimeout(() => setClickScale(false), 200);
     const nextPct = Math.round(((progress + 1) / goal) * 100);
     setQuote(getQuote(nextPct));
-  }, [onIncrement, progress, goal]);
+    onClickSound(nextPct);
+  }, [onIncrement, progress, goal, onClickSound]);
 
   return (
     <>
@@ -112,7 +120,7 @@ export function ProgressTracker({
               {isComplete ? (
                 <span className="gradient-text">🎉 Goal Complete!</span>
               ) : (
-                <span className="gradient-text">Your Progress</span>
+                <span className="gradient-text">{name}'s Progress</span>
               )}
             </h1>
             {lastClickTime && !isComplete && (
@@ -123,10 +131,7 @@ export function ProgressTracker({
           </div>
 
           {/* Progress Card */}
-          <motion.div
-            layout
-            className="glass-card p-6 md:p-8 space-y-6"
-          >
+          <motion.div layout className="glass-card p-6 md:p-8 space-y-6">
             {/* Percentage */}
             <div className="text-center space-y-1">
               <motion.div
@@ -152,7 +157,6 @@ export function ProgressTracker({
                 animate={{ width: `${Math.min(percentage, 100)}%` }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               />
-              {/* Glowing edge */}
               {percentage > 0 && percentage < 100 && (
                 <motion.div
                   className="absolute top-0 bottom-0 w-2 rounded-full bg-primary-foreground/30 blur-sm"
@@ -167,13 +171,13 @@ export function ProgressTracker({
             <AnimatePresence mode="wait">
               <motion.div
                 key={quote}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3 }}
-                className="text-center text-base md:text-lg text-muted-foreground italic min-h-[3rem] flex items-center justify-center px-4 leading-relaxed font-medium"
+                initial={{ opacity: 0, y: 12, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -12, scale: 0.97 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="text-center text-lg md:text-xl text-foreground font-bold italic min-h-[3.5rem] flex items-center justify-center px-4 py-3 leading-relaxed"
               >
-                {progress > 0 || isComplete ? quote : "Ready when you are ✨"}
+                {progress > 0 || isComplete ? `"${quote}"` : "Ready when you are ✨"}
               </motion.div>
             </AnimatePresence>
 

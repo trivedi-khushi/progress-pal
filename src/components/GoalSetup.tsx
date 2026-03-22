@@ -1,20 +1,21 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Target, Sparkles } from "lucide-react";
+import { Target, Sparkles, User } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface GoalSetupProps {
-  onSetGoal: (goal: number) => void;
+  onSetGoal: (goal: number, name: string) => void;
 }
 
 export function GoalSetup({ onSetGoal }: GoalSetupProps) {
+  const [name, setName] = useState("");
   const [value, setValue] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const num = parseInt(value, 10);
-    if (num > 0 && num <= 10000) onSetGoal(num);
+    if (num > 0 && num <= 10000 && name.trim()) onSetGoal(num, name.trim());
   };
 
   return (
@@ -38,10 +39,22 @@ export function GoalSetup({ onSetGoal }: GoalSetupProps) {
             <span className="gradient-text">Set Your Goal</span>
           </h1>
           <p className="text-muted-foreground text-sm">
-            How many steps to your next milestone?
+            Tell us your name and how many steps to your milestone
           </p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="pl-10 text-center text-lg font-display h-12 bg-background/60 border-border/50 focus:border-primary/50 transition-all"
+              autoFocus
+              maxLength={30}
+            />
+          </div>
           <Input
             type="number"
             min={1}
@@ -50,11 +63,10 @@ export function GoalSetup({ onSetGoal }: GoalSetupProps) {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             className="text-center text-2xl font-display h-14 bg-background/60 border-border/50 focus:border-primary/50 transition-all"
-            autoFocus
           />
           <Button
             type="submit"
-            disabled={!value || parseInt(value) <= 0}
+            disabled={!value || parseInt(value) <= 0 || !name.trim()}
             className="w-full h-12 text-base font-semibold gap-2 rounded-xl"
           >
             <Sparkles className="w-4 h-4" />

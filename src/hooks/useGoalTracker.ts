@@ -7,6 +7,7 @@ export interface LogEntry {
 
 interface GoalState {
   goal: number | null;
+  name: string | null;
   progress: number;
   logs: LogEntry[];
   startedAt: number | null;
@@ -20,7 +21,7 @@ function loadState(): GoalState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
   } catch {}
-  return { goal: null, progress: 0, logs: [], startedAt: null, completedAt: null };
+  return { goal: null, name: null, progress: 0, logs: [], startedAt: null, completedAt: null };
 }
 
 function saveState(state: GoalState) {
@@ -34,8 +35,8 @@ export function useGoalTracker() {
     saveState(state);
   }, [state]);
 
-  const setGoal = useCallback((goal: number) => {
-    setState((s) => ({ ...s, goal, progress: 0, logs: [], startedAt: null, completedAt: null }));
+  const setGoal = useCallback((goal: number, name: string) => {
+    setState({ goal, name, progress: 0, logs: [], startedAt: null, completedAt: null });
   }, []);
 
   const increment = useCallback(() => {
@@ -55,20 +56,19 @@ export function useGoalTracker() {
   }, []);
 
   const reset = useCallback(() => {
-    const fresh = { goal: null, progress: 0, logs: [], startedAt: null, completedAt: null };
-    setState(fresh);
+    setState({ goal: null, name: null, progress: 0, logs: [], startedAt: null, completedAt: null });
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
   const percentage = state.goal ? Math.round((state.progress / state.goal) * 100) : 0;
   const isComplete = state.goal !== null && state.progress >= state.goal;
   const lastClickTime = state.logs.length > 0 ? state.logs[0].timestamp : null;
-
   const totalDuration =
     state.startedAt && state.completedAt ? state.completedAt - state.startedAt : null;
 
   return {
     goal: state.goal,
+    name: state.name,
     progress: state.progress,
     logs: state.logs,
     percentage,
