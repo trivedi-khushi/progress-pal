@@ -4,6 +4,7 @@ import { Plus, RotateCcw, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getQuote } from "@/lib/quotes";
 import { formatTimeAgo, formatDuration } from "@/lib/timeFormat";
+import { getGoalType } from "@/lib/goalTypes";
 import { ActivityLog } from "@/components/ActivityLog";
 import { ResetDialog } from "@/components/ResetDialog";
 import { HueBurst } from "@/components/HueBurst";
@@ -13,6 +14,7 @@ import confetti from "canvas-confetti";
 interface ProgressTrackerProps {
   goal: number;
   name: string;
+  goalType: string;
   progress: number;
   percentage: number;
   isComplete: boolean;
@@ -29,6 +31,7 @@ interface ProgressTrackerProps {
 export function ProgressTracker({
   goal,
   name,
+  goalType,
   progress,
   percentage,
   isComplete,
@@ -143,7 +146,7 @@ export function ProgressTracker({
                 {displayPct}%
               </motion.div>
               <div className="text-sm text-muted-foreground font-medium">
-                {progress} / {goal}
+                {progress} / {goal} {getGoalType(goalType)?.unitLabel ?? ""}
               </div>
             </div>
 

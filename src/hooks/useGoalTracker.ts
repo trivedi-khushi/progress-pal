@@ -8,6 +8,7 @@ export interface LogEntry {
 interface GoalState {
   goal: number | null;
   name: string | null;
+  goalType: string | null;
   progress: number;
   logs: LogEntry[];
   startedAt: number | null;
@@ -21,7 +22,7 @@ function loadState(): GoalState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
   } catch {}
-  return { goal: null, name: null, progress: 0, logs: [], startedAt: null, completedAt: null };
+  return { goal: null, name: null, goalType: null, progress: 0, logs: [], startedAt: null, completedAt: null };
 }
 
 function saveState(state: GoalState) {
@@ -35,8 +36,8 @@ export function useGoalTracker() {
     saveState(state);
   }, [state]);
 
-  const setGoal = useCallback((goal: number, name: string) => {
-    setState({ goal, name, progress: 0, logs: [], startedAt: null, completedAt: null });
+  const setGoal = useCallback((goal: number, name: string, goalType: string) => {
+    setState({ goal, name, goalType, progress: 0, logs: [], startedAt: null, completedAt: null });
   }, []);
 
   const increment = useCallback(() => {
@@ -56,7 +57,7 @@ export function useGoalTracker() {
   }, []);
 
   const reset = useCallback(() => {
-    setState({ goal: null, name: null, progress: 0, logs: [], startedAt: null, completedAt: null });
+    setState({ goal: null, name: null, goalType: null, progress: 0, logs: [], startedAt: null, completedAt: null });
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
@@ -69,6 +70,7 @@ export function useGoalTracker() {
   return {
     goal: state.goal,
     name: state.name,
+    goalType: state.goalType,
     progress: state.progress,
     logs: state.logs,
     percentage,
