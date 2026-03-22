@@ -31,6 +31,7 @@ interface ProgressTrackerProps {
 export function ProgressTracker({
   goal,
   name,
+  goalType,
   progress,
   percentage,
   isComplete,
