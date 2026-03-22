@@ -14,6 +14,7 @@ import confetti from "canvas-confetti";
 interface ProgressTrackerProps {
   goal: number;
   name: string;
+  goalType: string;
   progress: number;
   percentage: number;
   isComplete: boolean;
