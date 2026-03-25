@@ -133,9 +133,9 @@ export function ProgressTracker({
           </div>
 
           {/* Progress Card */}
-          <motion.div layout className="glass-card p-6 md:p-8 space-y-6">
+          <motion.div layout className="space-y-6">
             {/* Percentage */}
-            <div className="text-center space-y-1">
+            <div className="text-center space-y-2">
               <motion.div
                 key={displayPct}
                 className="text-6xl font-display font-bold tabular-nums gradient-text"
@@ -144,7 +144,7 @@ export function ProgressTracker({
               >
                 {displayPct}%
               </motion.div>
-              <div className="text-sm text-muted-foreground font-medium">
+              <div className="text-xl md:text-2xl text-foreground font-bold">
                 {progress} / {goal} {getGoalType(goalType)?.unitLabel ?? ""}
               </div>
             </div>
