@@ -90,5 +90,6 @@ export function useGoalTracker() {
     setGoal,
     increment,
     reset,
+    repeatGoal,
   };
 }
