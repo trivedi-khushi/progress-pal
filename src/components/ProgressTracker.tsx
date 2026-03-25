@@ -84,15 +84,13 @@ export function ProgressTracker({
       onCompleteSound();
       const colors = ["#22C55E", "#3B82F6", "#EF4444", "#EAB308", "#F97316", "#8B5CF6", "#FFFFFF"];
       // Initial burst
-      confetti({ particleCount: 40, spread: 70, origin: { y: 0.6 }, colors });
-      // Two delayed side bursts
+      confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 }, colors });
       setTimeout(() => {
-        confetti({ particleCount: 25, angle: 60, spread: 55, origin: { x: 0, y: 0.65 }, colors });
-        confetti({ particleCount: 25, angle: 120, spread: 55, origin: { x: 1, y: 0.65 }, colors });
+        confetti({ particleCount: 50, angle: 60, spread: 60, origin: { x: 0, y: 0.65 }, colors });
+        confetti({ particleCount: 50, angle: 120, spread: 60, origin: { x: 1, y: 0.65 }, colors });
       }, 300);
-      // Final gentle shower
       setTimeout(() => {
-        confetti({ particleCount: 20, spread: 100, origin: { y: 0.4 }, gravity: 0.6, colors });
+        confetti({ particleCount: 40, spread: 120, origin: { y: 0.4 }, gravity: 0.6, colors });
       }, 700);
     }
   }, [isComplete, hasTriggeredConfetti, onCompleteSound]);
@@ -135,9 +133,9 @@ export function ProgressTracker({
           </div>
 
           {/* Progress Card */}
-          <motion.div layout className="glass-card p-6 md:p-8 space-y-6">
+          <motion.div layout className="space-y-6">
             {/* Percentage */}
-            <div className="text-center space-y-1">
+            <div className="text-center space-y-2">
               <motion.div
                 key={displayPct}
                 className="text-6xl font-display font-bold tabular-nums gradient-text"
@@ -146,7 +144,7 @@ export function ProgressTracker({
               >
                 {displayPct}%
               </motion.div>
-              <div className="text-sm text-muted-foreground font-medium">
+              <div className="text-xl md:text-2xl text-foreground font-bold">
                 {progress} / {goal} {getGoalType(goalType)?.unitLabel ?? ""}
               </div>
             </div>
