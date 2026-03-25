@@ -61,13 +61,15 @@ export function GoalSetup({ onSetGoal }: GoalSetupProps) {
 
   return (
     <div
-      className="flex min-h-screen items-center justify-center p-4"
+      className="relative flex min-h-screen items-center justify-center p-4"
       style={{
         backgroundImage: `url(${doodleBg})`,
-        backgroundSize: "420px",
+        backgroundSize: "300px",
         backgroundRepeat: "repeat",
       }}
     >
+      {/* Soft white overlay to fade the pattern */}
+      <div className="absolute inset-0 bg-background/80 pointer-events-none" />
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
