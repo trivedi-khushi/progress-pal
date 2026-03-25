@@ -43,12 +43,14 @@ export function ProgressTracker({
   isDark,
   onIncrement,
   onReset,
+  onRepeat,
   onClickSound,
   onCompleteSound,
 }: ProgressTrackerProps) {
   const [quote, setQuote] = useState(() => getQuote(0));
   const [lastUpdated, setLastUpdated] = useState("");
   const [showReset, setShowReset] = useState(false);
+  const [showCompletion, setShowCompletion] = useState(false);
   const [clickScale, setClickScale] = useState(false);
   const [hasTriggeredConfetti, setHasTriggeredConfetti] = useState(false);
   const [burstTrigger, setBurstTrigger] = useState(0);
