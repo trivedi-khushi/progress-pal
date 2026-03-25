@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Target, Sparkles, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { GOAL_TYPES, getGoalType } from "@/lib/goalTypes";
+import doodleBg from "@/assets/doodle-bg.png";
 import {
   Select,
   SelectContent,
