@@ -247,6 +247,25 @@ export function ProgressTracker({
             setDisplayPct(0);
           }}
         />
+
+        <CompletionDialog
+          open={showCompletion}
+          onOpenChange={setShowCompletion}
+          onRepeat={() => {
+            onRepeat();
+            setShowCompletion(false);
+            setQuote(getQuote(0));
+            setHasTriggeredConfetti(false);
+            setDisplayPct(0);
+          }}
+          onHome={() => {
+            onReset();
+            setShowCompletion(false);
+            setQuote(getQuote(0));
+            setHasTriggeredConfetti(false);
+            setDisplayPct(0);
+          }}
+        />
       </div>
     </>
   );
