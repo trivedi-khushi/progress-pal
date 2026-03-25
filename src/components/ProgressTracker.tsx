@@ -82,17 +82,18 @@ export function ProgressTracker({
     if (isComplete && !hasTriggeredConfetti) {
       setHasTriggeredConfetti(true);
       onCompleteSound();
-      const end = Date.now() + 2500;
-      const fire = () => {
-        confetti({
-          particleCount: 100,
-          spread: 120,
-          origin: { y: 0.6 },
-          colors: ["#8B5CF6", "#D946EF", "#3B82F6", "#EC4899", "#6366F1"],
-        });
-        if (Date.now() < end) requestAnimationFrame(fire);
-      };
-      fire();
+      const colors = ["#22C55E", "#3B82F6", "#EF4444", "#EAB308", "#F97316", "#8B5CF6", "#FFFFFF"];
+      // Initial burst
+      confetti({ particleCount: 40, spread: 70, origin: { y: 0.6 }, colors });
+      // Two delayed side bursts
+      setTimeout(() => {
+        confetti({ particleCount: 25, angle: 60, spread: 55, origin: { x: 0, y: 0.65 }, colors });
+        confetti({ particleCount: 25, angle: 120, spread: 55, origin: { x: 1, y: 0.65 }, colors });
+      }, 300);
+      // Final gentle shower
+      setTimeout(() => {
+        confetti({ particleCount: 20, spread: 100, origin: { y: 0.4 }, gravity: 0.6, colors });
+      }, 700);
     }
   }, [isComplete, hasTriggeredConfetti, onCompleteSound]);
 
