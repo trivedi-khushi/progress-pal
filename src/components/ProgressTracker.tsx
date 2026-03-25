@@ -25,6 +25,7 @@ interface ProgressTrackerProps {
   isDark: boolean;
   onIncrement: () => void;
   onReset: () => void;
+  onRepeat: () => void;
   onClickSound: (pct: number) => void;
   onCompleteSound: () => void;
 }
