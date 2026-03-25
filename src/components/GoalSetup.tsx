@@ -74,7 +74,7 @@ export function GoalSetup({ onSetGoal }: GoalSetupProps) {
         initial={{ opacity: 0, y: 30, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="glass-card p-8 md:p-12 w-full max-w-md text-center space-y-8"
+        className="relative z-10 glass-card p-8 md:p-12 w-full max-w-md text-center space-y-8"
       >
         <motion.div
           initial={{ scale: 0 }}
