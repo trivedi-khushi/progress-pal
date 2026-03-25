@@ -33,6 +33,7 @@ const Index = () => {
           isDark={isDark}
           onIncrement={tracker.increment}
           onReset={tracker.reset}
+          onRepeat={tracker.repeatGoal}
           onClickSound={playClick}
           onCompleteSound={playComplete}
         />

@@ -7,6 +7,7 @@ import { formatTimeAgo, formatDuration } from "@/lib/timeFormat";
 import { getGoalType } from "@/lib/goalTypes";
 import { ActivityLog } from "@/components/ActivityLog";
 import { ResetDialog } from "@/components/ResetDialog";
+import { CompletionDialog } from "@/components/CompletionDialog";
 import { HueBurst } from "@/components/HueBurst";
 import type { LogEntry } from "@/hooks/useGoalTracker";
 import confetti from "canvas-confetti";
@@ -24,6 +25,7 @@ interface ProgressTrackerProps {
   isDark: boolean;
   onIncrement: () => void;
   onReset: () => void;
+  onRepeat: () => void;
   onClickSound: (pct: number) => void;
   onCompleteSound: () => void;
 }
@@ -41,12 +43,14 @@ export function ProgressTracker({
   isDark,
   onIncrement,
   onReset,
+  onRepeat,
   onClickSound,
   onCompleteSound,
 }: ProgressTrackerProps) {
   const [quote, setQuote] = useState(() => getQuote(0));
   const [lastUpdated, setLastUpdated] = useState("");
   const [showReset, setShowReset] = useState(false);
+  const [showCompletion, setShowCompletion] = useState(false);
   const [clickScale, setClickScale] = useState(false);
   const [hasTriggeredConfetti, setHasTriggeredConfetti] = useState(false);
   const [burstTrigger, setBurstTrigger] = useState(0);
@@ -91,6 +95,7 @@ export function ProgressTracker({
       }, 300);
       setTimeout(() => {
         confetti({ particleCount: 40, spread: 120, origin: { y: 0.4 }, gravity: 0.6, colors });
+        setShowCompletion(true);
       }, 700);
     }
   }, [isComplete, hasTriggeredConfetti, onCompleteSound]);
@@ -237,6 +242,25 @@ export function ProgressTracker({
           onConfirm={() => {
             onReset();
             setShowReset(false);
+            setQuote(getQuote(0));
+            setHasTriggeredConfetti(false);
+            setDisplayPct(0);
+          }}
+        />
+
+        <CompletionDialog
+          open={showCompletion}
+          onOpenChange={setShowCompletion}
+          onRepeat={() => {
+            onRepeat();
+            setShowCompletion(false);
+            setQuote(getQuote(0));
+            setHasTriggeredConfetti(false);
+            setDisplayPct(0);
+          }}
+          onHome={() => {
+            onReset();
+            setShowCompletion(false);
             setQuote(getQuote(0));
             setHasTriggeredConfetti(false);
             setDisplayPct(0);

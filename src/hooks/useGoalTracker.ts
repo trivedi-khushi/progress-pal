@@ -61,6 +61,16 @@ export function useGoalTracker() {
     localStorage.removeItem(STORAGE_KEY);
   }, []);
 
+  const repeatGoal = useCallback(() => {
+    setState((s) => ({
+      ...s,
+      progress: 0,
+      logs: [],
+      startedAt: null,
+      completedAt: null,
+    }));
+  }, []);
+
   const percentage = state.goal ? Math.round((state.progress / state.goal) * 100) : 0;
   const isComplete = state.goal !== null && state.progress >= state.goal;
   const lastClickTime = state.logs.length > 0 ? state.logs[0].timestamp : null;
@@ -80,5 +90,6 @@ export function useGoalTracker() {
     setGoal,
     increment,
     reset,
+    repeatGoal,
   };
 }
