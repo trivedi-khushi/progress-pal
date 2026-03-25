@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Target, Sparkles, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { GOAL_TYPES, getGoalType } from "@/lib/goalTypes";
+import doodleBg from "@/assets/doodle-bg.png";
 import {
   Select,
   SelectContent,
@@ -59,7 +60,14 @@ export function GoalSetup({ onSetGoal }: GoalSetupProps) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
+    <div
+      className="flex min-h-screen items-center justify-center p-4"
+      style={{
+        backgroundImage: `url(${doodleBg})`,
+        backgroundSize: "420px",
+        backgroundRepeat: "repeat",
+      }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.96 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
