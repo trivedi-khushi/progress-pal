@@ -7,6 +7,7 @@ import { formatTimeAgo, formatDuration } from "@/lib/timeFormat";
 import { getGoalType } from "@/lib/goalTypes";
 import { ActivityLog } from "@/components/ActivityLog";
 import { ResetDialog } from "@/components/ResetDialog";
+import { CompletionDialog } from "@/components/CompletionDialog";
 import { HueBurst } from "@/components/HueBurst";
 import type { LogEntry } from "@/hooks/useGoalTracker";
 import confetti from "canvas-confetti";
