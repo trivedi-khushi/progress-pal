@@ -95,6 +95,7 @@ export function ProgressTracker({
       }, 300);
       setTimeout(() => {
         confetti({ particleCount: 40, spread: 120, origin: { y: 0.4 }, gravity: 0.6, colors });
+        setShowCompletion(true);
       }, 700);
     }
   }, [isComplete, hasTriggeredConfetti, onCompleteSound]);
