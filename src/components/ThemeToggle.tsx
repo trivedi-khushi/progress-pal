@@ -1,5 +1,4 @@
 import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
 interface ThemeToggleProps {
@@ -9,25 +8,30 @@ interface ThemeToggleProps {
 
 export function ThemeToggle({ isDark, onToggle }: ThemeToggleProps) {
   return (
-    <Button
-      variant="ghost"
-      size="icon"
+    <button
       onClick={onToggle}
-      className="fixed top-4 right-4 z-50 rounded-full w-10 h-10 bg-card/60 backdrop-blur-md border border-border/40"
+      className="fixed top-4 right-4 z-50 w-14 h-7 rounded-full bg-muted border border-border/50 backdrop-blur-md p-0.5 transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      aria-label="Toggle dark mode"
     >
       <motion.div
-        key={isDark ? "moon" : "sun"}
-        initial={{ rotate: -90, opacity: 0 }}
-        animate={{ rotate: 0, opacity: 1 }}
-        exit={{ rotate: 90, opacity: 0 }}
-        transition={{ duration: 0.3 }}
+        className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md"
+        animate={{ x: isDark ? 26 : 0 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
       >
-        {isDark ? (
-          <Moon className="w-4 h-4 text-foreground" />
-        ) : (
-          <Sun className="w-4 h-4 text-foreground" />
-        )}
+        <motion.div
+          key={isDark ? "moon" : "sun"}
+          initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+          animate={{ rotate: 0, opacity: 1, scale: 1 }}
+          exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+          transition={{ duration: 0.2 }}
+        >
+          {isDark ? (
+            <Moon className="w-3.5 h-3.5 text-primary-foreground" />
+          ) : (
+            <Sun className="w-3.5 h-3.5 text-primary-foreground" />
+          )}
+        </motion.div>
       </motion.div>
-    </Button>
+    </button>
   );
 }
