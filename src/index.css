@@ -130,9 +130,10 @@
                 0 1px 3px hsl(0 0% 0% / 0.06);
   }
   .dark .glass-card {
-    @apply bg-card/50;
-    box-shadow: 0 4px 30px hsl(262 83% 58% / 0.08),
-                0 1px 3px hsl(0 0% 0% / 0.2);
+    @apply bg-card/80 border-border/60;
+    box-shadow: 0 4px 40px hsl(262 83% 58% / 0.12),
+                0 0 60px hsl(262 83% 58% / 0.06),
+                0 1px 3px hsl(0 0% 0% / 0.4);
   }
   .gradient-text {
     @apply bg-clip-text text-transparent;
